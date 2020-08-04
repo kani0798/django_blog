@@ -44,7 +44,7 @@ def add_post(request):
 
 def update_post(request, pk):
     post = get_object_or_404(Post, pk=pk)
-    post_form = UpdatePostForm(request.POST, request.FILES or None, instance=post)
+    post_form = UpdatePostForm(request.POST or None, request.FILES or None, instance=post)
     if post_form.is_valid():
         post_form.save()
         return redirect(post.get_absolute_url())
@@ -52,4 +52,8 @@ def update_post(request, pk):
 
 
 def delete_post(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    if request.method == 'POST':
+        post.delete()
+        return redirect('home-page')
     return render(request, 'blog/delete_post.html', {})
