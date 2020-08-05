@@ -18,10 +18,11 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 
-from blog.views import categories_list
+
+from blog.class_views import CategoriesListView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', categories_list, name='home-page'),
+    path('', CategoriesListView.as_view(), name='home-page'),
     path('posts/', include('blog.urls')),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)   # для того чтобы он видел картинки в папке media
