@@ -8,9 +8,27 @@
 </head>
 <body>
 	<nav class="navbar navbar-dark bg-dark">
-		<a href="{% url 'home-page' %}" class="navbar-text">DJANGO</a>
-
-	</nav>
+		<div class="container">
+			<a href="{% url 'home-page' %}" class="navbar-text">DJANGO</a>
+			<ul class="navbar-nav">
+				{% if request.user.is_authenticated %}
+					<li class="navbar-item mr-right">
+						<span class="navbar-text">{{ request.user.username }}</span>
+					</li>
+					<li>
+						<a href="{% url 'logout' %}" class="navbar-text">Log out</a>
+					</li>
+				{% else %}
+					<li class="navbar-item mr-right">
+						<a class="navbar-link" href="{% url 'login' %}">Log in</a>
+					</li>
+					<li class="navbar-item mr-right">
+						<a class="navbar-link" href="{% url 'signup' %}">Sign up</a>
+					</li>
+				{% endif %}
+			</ul>
+		</div>
+    </nav>
 	<div class="container">
 		{% block body %}  {% endblock body %}
 	</div>
