@@ -17,7 +17,11 @@
 		    <tr>
 		        <td><a href="{% url 'post-details' post.id %}">{{ post.title }}</a> </td>
 		        <td>{% if post.image %} <img src="{{ post.image.url }}" width="150" height="100"> {% endif %}</td>
-		        <td><a class="btn btn-success btn-sm" role="button" href="{% url 'update-post' post.id %}">Update post</a> <a class="btn btn-secondary btn-sm" role="button" href="{% url 'delete-post' post.id %}">Delete post</a></td>
+		        <td>
+			        {% if request.user.is_authenticated and post.user == request.user %}
+			        <a class="btn btn-success btn-sm" role="button" href="{% url 'update-post' post.id %}">Update post</a> <a class="btn btn-secondary btn-sm" role="button" href="{% url 'delete-post' post.id %}">Delete post</a>
+		            {% endif %}
+		        </td>
 		    </tr>
 		{% endfor %}
         <tr>
