@@ -2,29 +2,52 @@
 {% load static %}
 {% block body %}
     <h1>Список публикаций</h1>
-	<a role="button" class="btn btn-primary" href="{% url 'add-post' %}">+ Add new post</a>
-	<br>
-	<table class="table">
-		<thead class="thead-dark">
-         <tr>
-	      <th scope="col">Title</th>
-	      <th scope="col">Image</th>
-	      <th scope="col">Action</th>
-         </tr>
-	  </thead>
-	  <tbody>
-	  	{% for post in posts %}
-		    <tr>
-		        <td><a href="{% url 'post-details' post.id %}">{{ post.title }}</a> </td>
-		        <td>{% if post.image %} <img src="{{ post.image.url }}" width="150" height="100"> {% endif %}</td>
-		        <td>
-			        {% if request.user.is_authenticated and post.user == request.user %}
-			        <a class="btn btn-success btn-sm" role="button" href="{% url 'update-post' post.id %}">Update post</a> <a class="btn btn-secondary btn-sm" role="button" href="{% url 'delete-post' post.id %}">Delete post</a>
-		            {% endif %}
-		        </td>
-		    </tr>
-		{% endfor %}
+    <a role="button" class="btn btn-dark" href="{% url 'add-post' %}"> + Add new post</a><br>
+    <br>
+     <table class="table">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">Title</th>
+      <th scope="col">Image</th>
+      <th scope="col">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for post in page_obj.object_list %}
         <tr>
-	</table>
-
+            <td><a href="{% url 'post-details' post.id%}" >{{ post.title }}"</a></td>
+            <td>{% if post.image %}<img src="{{ post.image.url }}" width="100" height="100">{% endif %}</td>
+            <td>
+                {% if request.user.is_authenticated and post.user == request.user %}
+                    <a class="btn btn-success btn-sm" role="button" href="{% url 'update-post' post.id %}">Update post</a>
+                    <a class="btn btn-secondary" role="button" href="{% url 'delete-post' post.id %}">Delete post</a>
+                {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+  </tbody>
+</table>
+    <nav aria-label="Page navigation example">
+    <ul class="pagination">
+        {% if page_obj.has_previous  %}
+            <li class="page-item"><a class="page-link" href="?category={{ request.GET.category }}&page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a></li>
+        {% endif %}
+        <li class="page-item active"><a class="page-link" href="#">{{ page_obj.number }}</a></li>
+        {% if page_obj.has_next %}
+            <li class="page-item"><a class="page-link" href="?category={{ request.GET.category }}&page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a></li>
+        {% endif %}
+	    <li class="page-item disabled">
+		    <span class="page-link">...</span>
+		    <li class="page-item"><a class="page-link" href="?category={{ request.GET.category }}&page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages|add:"1" }}</a></li>
+	    </li>
+     </ul>
+</nav>
+{#	{{ page_obj.has_previous }}#}
+{#	{{ page_obj.has_next }}#}
+{#	{{ page_obj.previous_page_number }}#}
+{#	{{ page_obj.next_page_number }}#}
+{#	{{ page_obj.number }}#}
+{#	{{ page_obj }}#}
+{#	{{ page_obj.objects_list }}#}
+{#	{{ page_obj.num_pages }}#}
 {% endblock body %}
